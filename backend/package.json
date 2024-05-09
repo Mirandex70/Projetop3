@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "express": "^4.18.2",
+    "jquery": "^3.7.1",
+    "mysql2": "^3.6.4"
+  },
+  "name": "projeto",
+  "version": "1.0.0",
+  "description": "projetofinal",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "keywords": [
+    "node",
+    "p2",
+    "projeto",
+    "js"
+  ],
+  "author": "joaomiranda&diogosantos",
+  "license": "ISC"
+}

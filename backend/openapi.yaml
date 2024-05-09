@@ -1,0 +1,325 @@
+openapi: 3.0.0
+info:
+  title: AutoConnect API
+  description: API de Aplicação de Gestão de Carros e Utilizadores
+  version: 1.0.0
+servers:
+  - url: http://localhost/5000
+tags:
+  - name: carros
+    description: Toda a informação sobre os carros.
+  - name: utilizadores
+    description: Toda a informação sobre os utilizadores.
+paths:
+  /carros:
+    get:
+      tags:
+        - carros
+      summary: Obter todos os carros
+      responses:
+        '200':
+          description: Uma lista de todos os carros
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Carro'
+    post:
+      tags:
+      - carros
+      summary: Criar um novo carro
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NovoCarro'
+      responses:
+        '201':
+          description: O carro recém-criado
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carro'
+          
+  /utilizadores:
+    get:
+      tags:
+        - utilizadores
+      summary: Obter todos os utilizadores
+      responses:
+        '200':
+          description: Lista de utilizadores
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Utilizador'
+    post:
+      tags:
+        - utilizadores
+      summary: Criar um novo utilizador
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Utilizador'
+      responses:
+        '201':
+          description: Utilizador criado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Utilizador'
+        '400':
+          description: Requisição inválida
+
+  /utilizadores/{id}:
+    get:
+      tags:
+        - utilizadores
+      summary: Obter um único utilizador pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do utilizador a ser obtido
+      responses:
+        '200':
+          description: Utilizador pedido
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Utilizador'
+        '404':
+          description: Utilizador não encontrado
+
+    put:
+      tags:
+        - utilizadores
+      summary: Atualizar um utilizador existente pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do utilizador a ser atualizado
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Utilizador'
+      responses:
+        '200':
+          description: Utilizador atualizado com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Utilizador'
+        '404':
+          description: Utilizador não encontrado
+        '400':
+          description: Requisição inválida
+
+    delete:
+      tags:
+        - utilizadores
+      summary: Apagar um utilizador pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do utilizador a ser apagado
+      responses:
+        '204':
+          description: Utilizador apagado com sucesso
+        '404':
+          description: Utilizador não encontrado
+        '400':
+          description: Pedido inválido
+
+  /carros/{id}:
+    get:
+      tags:
+        - carros
+      summary: Obter um único carro pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do carro a ser obtido
+      responses:
+        '200':
+          description: O carro solicitado pelo id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carro'
+        '404':
+          description: Carro não encontrado
+    put:
+      tags:
+        - carros
+      summary: Atualizar um único carro pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do carro a ser obtido
+      responses:
+        '200':
+          description: O carro solicitado pelo id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Carro'
+        '404':
+          description: Carro não encontrado      
+          
+    delete:
+      tags:
+        - carros
+      summary: Apagar um carro pelo ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do carro a ser apagado
+      responses:
+        '204':
+          description: Carro apagado com sucesso
+        '404':
+          description: Carro não encontrado
+        '400':
+          description: Pedido inválido
+          
+  /carros/{id}/imagens:
+    post:
+      tags:
+        - carros
+      summary: Fazer upload de uma imagem para um carro
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do carro ao qual a imagem será associada
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                imagem:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: Imagem carregada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImagemCarro'
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Carro não encontrado
+        '500':
+          description: Erro interno do servidor 
+          
+    get:
+      tags:
+        - carros
+      summary: Receber a lista de imagens do carro
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: ID do carro ao qual a imagem será associada
+      responses:
+        '201':
+          description: Imagem carregada com sucesso
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImagemCarro'
+        '400':
+          description: Pedido inválido
+        '404':
+          description: Carro não encontrado
+        '500':
+          description: Erro interno do servidor
+
+
+
+components:
+  schemas:
+    Carro:
+      type: object
+      properties:
+        id_carro:
+          type: integer
+        marca:
+          type: string
+        data:
+          type: integer
+        id_user:
+          type: integer
+        cor:
+          type: string
+    NovoCarro:
+      type: object
+      properties:
+        marca:
+          type: string
+        data:
+          type: integer
+        id_user:
+          type: integer
+        cor:
+          type: string
+    Utilizador:
+      type: object
+      properties:
+        id_user:
+          type: integer
+        nome:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    ImagemCarro:
+      type: object
+      properties:
+        id_imagem:
+          type: integer
+        id_carro:
+          type: integer
+        imagem_nome:
+          type: string
+        imagem_tipo:
+          type: string
+        imagem_tamanho:
+          type: integer
+        imagem_url:
+          type: string
