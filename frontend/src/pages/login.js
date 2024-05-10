@@ -8,7 +8,6 @@ function LoginPage() {
   
   const handleLogin = (event) => {
     event.preventDefault();
-    // Here you can handle the login logic, authenticate user, etc.
     console.log('Login Details:', username, password);
   };
 
