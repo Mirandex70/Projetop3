@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box } from "@mui/material";
+import { Container, TextField, Button, Typography, Box, Link } from "@mui/material";
 
 function LoginPage() {
   const [name, setName] = useState("");
@@ -23,7 +23,7 @@ function LoginPage() {
         }}
       >
         <Typography component="h1" variant="h5">
-          Sign in
+          Registar
         </Typography>
         <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -72,6 +72,8 @@ function LoginPage() {
           >
             Sign In
           </Button>
+          <Link href="/" variant="body2"> voltar </Link>
+
         </Box>
       </Box>
     </Container>

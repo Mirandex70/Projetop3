@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Box } from '@mui/material';
+import { Container, TextField, Button, Typography, Box, Link } from '@mui/material';
 
 function LoginPage() {
   const [username, setUsername] = useState('');
@@ -58,6 +58,7 @@ function LoginPage() {
           >
             Sign In
           </Button>
+          <Link href="/" variant="body2"> voltar </Link>
         </Box>
       </Box>
     </Container>
