@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignupPage from "./pages/registar";
 import HomePage from "./pages/home";
 import Perfil from "./pages/perfil";
+import CarPage from "./pages/car";
 
 function App() {
   const user = {
@@ -19,7 +20,7 @@ function App() {
           brand: "Mercedes-Benz",
           color: "Preto",
           image:
-            "https://unsplash.com/pt-br/fotografias/black-car-mercedes-benz-650s-X140-2015-Cs-bzLNgxJXB-w",
+            "https://images.unsplash.com/photo-1555215695-3004980ad54e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         },
         {
           id: 2,
@@ -61,6 +62,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/registar" element={<SignupPage />} />
           <Route path="/perfil" element={<Perfil user={user} />} />
+          <Route path="/car/:id" element={<CarPage user={user} />} />
+
         </Routes>
       </BrowserRouter>
     </div>
