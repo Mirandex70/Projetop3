@@ -7,7 +7,7 @@ router.post("/carros", carro.create);
 
 router.get("/carros", carro.findAllByUser);
 
-router.get("/carros/:id_carro", carro.findById);
+//router.get("/carros/:id_carro", carro.findById);
 
 router.put("/carros/:id_carro/", carro.update);
 
