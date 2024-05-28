@@ -1,4 +1,5 @@
-const connection = require("./conexao.db");
+const sequelize = require("sequelize");
+const connection = require("../config/db.config.js");
 
 const User = function(dados) {
     this.marca = dados.marca,

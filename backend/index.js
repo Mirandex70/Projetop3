@@ -2,11 +2,9 @@ const express = require('express');
 const app = express();
 
 //configurações
-app.set('port', process.eventNames.port || process.env.PORT || 5000);
+app.set('port', process.eventNames.port || process.env.PORT || 5001);
 app.use(express.urlencoded({ extended: true }));
 
-app.set("view engine", "ejs");
-app.set("views", "./views");
 
 app.use("/",( req,res,next) => {
    // console.log("URL: " + req.url + " || " + req.ip);

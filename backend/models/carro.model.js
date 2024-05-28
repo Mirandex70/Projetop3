@@ -1,4 +1,5 @@
-const connection = require("./conexao.db");
+const sequelize = require("sequelize");
+const connection = require("../config/db.config.js");
 
 const Carro = function (dados) {
   (this.marca = dados.marca), (this.data = dados.data), (this.id_user = idUser), (this.cor = dados.cor);
