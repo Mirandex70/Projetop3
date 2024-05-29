@@ -1,30 +1,19 @@
+//dependências
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('express');
+
+//app
 const app = express();
+app.set("port", process.env.PORT || 5001);
+app.use(express.json());
+app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-//configurações
-app.set('port', process.eventNames.port || process.env.PORT || 5001);
-app.use(express.urlencoded({ extended: true }));
-
-
-app.use("/",( req,res,next) => {
-   // console.log("URL: " + req.url + " || " + req.ip);
-   // console.log("Data: ", new Date());
-    next();
-});
-
+//rotas
 app.use("/", require("./routes/main.route"));
-app.use("/users", require("./routes/user.route"));
-app.use("/", require("./routes/carro.route"));
-app.use("/", require("./routes/auth.route"));
+app.use("/api/carros", require("./routes/carro.route"));
 
-app.listen (app.get("port"),() => {
-    console.log("Servidor iniciado na porta: " + app.get("port"));
-});
-
-app.use("/pages", express.static("./views/pages"));
-app.use("/images", express.static("./assets/images"));
-app.use("/assets", express.static("./assets"));
-app.use("/css", express.static("./node_modules/bootstrap/dist/css"));
-app.use("/js", express.static("./node_modules/bootstrap/dist/js"));
-app.use("/js", express.static("./node_modules/jquery/dist"));
-
+app.listen(app.get("port"), () => {
+    console.log("Servidor iniciado na porta: "+app.get ("port"));
+})
