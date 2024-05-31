@@ -1,8 +1,8 @@
 const sequelize = require("sequelize");
 const conexao = new sequelize(
-    "projetotestestetstetststet", "root", "123", {
+    "projetop2", "root", "123", {
         host: "localhost",
-        port: 5001,
+        port: 3306,
         dialect: "mysql",
     }
 );
