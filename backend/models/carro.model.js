@@ -14,7 +14,7 @@ let Carro = db.define(
     cor: sequelize.STRING,
   },
   {
-    timestamps: true,
+    timestamps: false,
     tableName: "carro",
   },
   console.log("Entrei na model.")

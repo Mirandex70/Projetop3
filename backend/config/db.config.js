@@ -1,8 +1,11 @@
 const sequelize = require("sequelize");
 const conexao = new sequelize(
-    "projetop2", "root", "123", {
+ {
         host: "localhost",
         port: 3306,
+        database: "projetop2",
+        username: "root",
+        password: "123",
         dialect: "mysql",
     }
 );

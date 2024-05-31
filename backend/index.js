@@ -9,6 +9,9 @@ app.set("port", process.env.PORT || 5001);
 app.use(express.json());
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({ credentials:true, origin:'http://localhost:3000'})); 
+
+
 
 //rotas
 app.use("/", require("./routes/main.route"));

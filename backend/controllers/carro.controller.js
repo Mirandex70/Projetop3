@@ -19,6 +19,26 @@ sequelize.sync();
             message: "Ocorreu um erro na execução da operação." || error.message,
           });
       });
+      console.log(dados)
+    res.status(200).json({
+      data: dados,
+      success: true,
+    });
+  };
+
+  controllers.getCarroById = async (req, res) => {
+    const dados = await Carro.findByPk(req.params.id_carro)
+      .then((resultado) => {
+        return resultado;
+      })
+      .catch((error) => {
+        res
+          .status(500)
+          .send({
+            success: false,
+            message: "Ocorreu um erro na execução da operação." || error.message,
+          });
+      });
     res.status(200).json({
       data: dados,
       success: true,

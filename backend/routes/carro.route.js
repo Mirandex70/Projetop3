@@ -19,5 +19,7 @@ router.delete("/carros", carro.deleteAll);
 
 router.get("/search/:marca", carro.searchByName);*/
 
+router.get("/:id_carro", carro.getCarroById);
+
 
 module.exports = router;
