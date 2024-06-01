@@ -1,50 +1,89 @@
-const User = require("../models/user.model.js");
+const sequelize = require("../config/database");
+const Auth = require("../models/auth.model");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+const config = require("../config/config");
 
-exports.login = (req, res) => {
-  const user = new User({
-    email: req.body.email,
-    password: req.body.password,
+const controllers = {};
+sequelize.sync();
+
+controllers.register = async (req, res) => {
+  const { email, password } = req.body;
+  const dados = await Auth.create({
+    email: email,
+    password: password,
+  })
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => {
+      res.status(500).send({
+        success: false,
+        message: error.message || "Ocorreu um erro na execução da operação.",
+      });
+    });
+
+  res.status(200).json({
+    success: true,
+    data: dados,
   });
+};
 
-  User.login(user, (error, data) => {
-    if (error) {
-      if (error.result === "não encontrado") {
-        res.status(404).send({
-          message: `Utilizador com o ID ${req.params.id_user} não encontrado.`,
+controllers.login = async (req, res) => {
+  const { email, password } = req.body;
+
+  const auth = await Auth.findOne({ where: { email: email } })
+    .then((result) => {
+      return result;
+    })
+    .catch((error) => {
+      res.status(500).send({
+        success: false,
+        message: error.message || "Ocorreu um erro na execução da operação.",
+      });
+    });
+
+  if (password === null || typeof password === "undefined") {
+    res.status(403).json({
+      success: false,
+      message: error.message ||"Ocorreu um erro na execução da operação.",
+    });
+  } else
+{
+    if (email && password && auth) {
+      //compara as passwords (em hash)
+      const isMatch = await bcrypt.compare(password, auth.password);
+
+      if (email == auth.email && isMatch) {
+        let token = jwt.sign(
+          {
+            email: email,
+          },
+          config.secret,
+          { expiresIn: config.timer }
+        );
+
+        res.status(200).json({
+          success: true,
+          AccessToken: token,
         });
       } else {
-        res.status(500).send({
-          message:
-            "Ocorreu um erro ao tentar aceder aos dados do utilizador com o ID " +
-            req.params.id_user +
-            ".",
+        res.status(403).json({
+          success: false,
+          message: error.message || "Ocorreu um erro na execução da operação.",
         });
       }
-    } else { 
-      console.log("login");
-    }
-  });
-};
-
-exports.register = (req, res) => {
-  const user = new User({
-    marca: req.body.marca,
-    email: req.body.email,
-    password: req.body.password,
-  });
-
-  User.register(user, (error, data) => {
-    if (error) {
-      res.status(500).send({
-        message: "Erro ao tentar registar o utilizador.",
-      });
     } else {
-      res.render("pages/login", { user: data });
+      res.status(400).json({
+        success: false,
+        message: error.message || "Ocorreu um erro na execução da operação.",
+      });
     }
-  });
+  }
 };
 
-exports.logout = (req, res) => {
-  console.log("logout");
-  res.redirect("/");
-};
+controllers.refreshToken = async (req, res) => {};
+
+controllers.logout = async (req, res) => {};
+
+module.exports = controllers;
