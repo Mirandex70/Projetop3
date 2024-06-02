@@ -1,4 +1,4 @@
-const sequelize = require("../config/database");
+const sequelize = require("../config/db.config");
 const Auth = require("../models/auth.model");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
@@ -30,55 +30,49 @@ controllers.register = async (req, res) => {
 };
 
 controllers.login = async (req, res) => {
-  const { email, password } = req.body;
+  try {
+    const { email, password } = req.body;
 
-  const auth = await Auth.findOne({ where: { email: email } })
-    .then((result) => {
-      return result;
-    })
-    .catch((error) => {
-      res.status(500).send({
+    if (!email || !password) {
+      return res.status(400).json({
         success: false,
-        message: error.message || "Ocorreu um erro na execução da operação.",
-      });
-    });
-
-  if (password === null || typeof password === "undefined") {
-    res.status(403).json({
-      success: false,
-      message: error.message ||"Ocorreu um erro na execução da operação.",
-    });
-  } else
-{
-    if (email && password && auth) {
-      //compara as passwords (em hash)
-      const isMatch = await bcrypt.compare(password, auth.password);
-
-      if (email == auth.email && isMatch) {
-        let token = jwt.sign(
-          {
-            email: email,
-          },
-          config.secret,
-          { expiresIn: config.timer }
-        );
-
-        res.status(200).json({
-          success: true,
-          AccessToken: token,
-        });
-      } else {
-        res.status(403).json({
-          success: false,
-          message: error.message || "Ocorreu um erro na execução da operação.",
-        });
-      }
-    } else {
-      res.status(400).json({
-        success: false,
-        message: error.message || "Ocorreu um erro na execução da operação.",
+        message: "Email e password devem ser fornecidos.",
       });
     }
+
+    const auth = await Auth.findOne({ where: { email } });
+    
+    if (!auth) {
+      return res.status(401).json({
+        success: false,
+        message: "Autenticação inválida. Utizador não encontrado.",
+      });
+    }
+
+    const isMatch = await bcrypt.compare(password, auth.password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Autenticação inválida. Password inválida.",
+      });
+    }
+
+    const token = jwt.sign(
+      { email: auth.email },
+      config.secret,
+      { expiresIn: config.timer }
+    );
+
+    return res.status(200).json({
+      success: true,
+      AccessToken: token,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || "Ocorreu um erro na execução da operação.",
+    });
   }
 };
 

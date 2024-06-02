@@ -17,13 +17,13 @@ const Login = () => {
       .then((result) => {
         //console.log(result);
         if (!result) {
-          console.error("Autenticação inválida!");
+          alert("Autenticação inválida!");
           setLoad(false);
         } else {
           setLoad(false);
           setEmail("");
           setPassword("");
-          nav("/listar");
+          nav("/");
         }
       })
       .catch((error) => {

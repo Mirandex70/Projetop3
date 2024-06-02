@@ -1,82 +1,73 @@
 import React, { useState } from "react";
-import { Container, TextField, Button, Typography, Box, Link } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import authService from "../../services/auth.service";
 
-function LoginPage() {
-  const [name, setName] = useState("");
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [load, setLoad] = useState(false);
+  const nav = useNavigate();
 
   const handleLogin = (event) => {
     event.preventDefault();
-    console.log("Login Details:", email, password);
+    setLoad(true);
+
+    authService
+      .login(email, password)
+      .then((result) => {
+        //console.log(result);
+        if (!result) {
+          alert("Autenticação inválida!");
+          setLoad(false);
+        } else {
+          setLoad(false);
+          setEmail("");
+          setPassword("");
+          nav("/");
+        }
+      })
+      .catch((error) => {
+        console.error(
+          "Ocorreu um erro ao executar o pedido. " || error.message
+        );
+        alert("Ocorreu um erro. Por favor, tente mais tarde.");
+      });
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography component="h1" variant="h5">
-          Registar
-        </Typography>
-        <Box component="form" onSubmit={handleLogin} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="name"
-            label="Name"
-            name="name"
-            autoComplete="name"
-            autoFocus
-            value={email}
-            onChange={(e) => setName(e.target.value)}
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            Sign In
-          </Button>
-          <Link href="/" variant="body2"> voltar </Link>
-
-        </Box>
-      </Box>
-    </Container>
+    <>
+      <h1>Sistema de Autenticação</h1>
+      <form method="post" onSubmit={handleLogin}>
+        <label htmlFor="email">Email:</label>&nbsp;
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
+          required
+        />
+        <br />
+        <label htmlFor="password">Password:</label>&nbsp;
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
+          required
+        />
+        <br />
+        <button type="submit" disabled={load}>
+          {load ? "Aguarde..." : "Entrar"}
+        </button>
+      </form>
+    </>
   );
-}
+};
 
-export default LoginPage;
+export default Login;

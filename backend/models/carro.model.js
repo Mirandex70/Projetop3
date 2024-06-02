@@ -17,7 +17,6 @@ let Carro = db.define(
     timestamps: false,
     tableName: "carro",
   },
-  console.log("Entrei na model.")
 );
 
 module.exports = Carro;
