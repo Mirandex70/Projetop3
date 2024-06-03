@@ -117,7 +117,7 @@ function ProfilePage() {
                             color="error"
                             onClick={handleClickOpen}
                         >
-                            Delete
+                            Apagar
                         </Button>
                         <Button
                             type="submit"
@@ -125,7 +125,7 @@ function ProfilePage() {
                             color="primary"
                             onClick={handleUpdate}
                         >
-                            Save
+                            Guardar
                         </Button>
                     </Box>
                 </form>
@@ -141,13 +141,13 @@ function ProfilePage() {
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Are you sure you want to delete your profile? This action cannot be undone.
+                        Tem a certeza que quer apagar o seu perfil? Esta ação não pode ser desfeita.
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
+                    <Button onClick={handleClose}>Cancelar</Button>
                     <Button onClick={handleDelete} autoFocus color="error">
-                        Delete
+                        Apagar
                     </Button>
                 </DialogActions>
             </Dialog>

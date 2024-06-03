@@ -109,7 +109,7 @@ function CarPage() {
               <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
                 <CardContent sx={{ flex: "1 0 auto", textAlign: "left" }}>
                   <Typography variant="h6" component="h2" gutterBottom>
-                    <strong>Brand:</strong>
+                    <strong>Marca:</strong>
                   </Typography>
                   <Typography variant="body1" component="p" gutterBottom>
                     {dados.marca}
@@ -180,7 +180,7 @@ function CarPage() {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose}>Cancelar</Button>
             <Button onClick={handleSave} color="secondary">
               Guardar
             </Button>
