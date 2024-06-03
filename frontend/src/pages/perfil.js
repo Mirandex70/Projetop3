@@ -15,7 +15,7 @@ function ProfilePage() {
 
     const nav = useNavigate();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = (event) => { 
         event.preventDefault();
     };
 
