@@ -5,10 +5,15 @@ const bcrypt = require("bcrypt");
 var Auth = db.define(
   "user",
   {
-    id: {
+    id_user: {
       type: sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    nome: {
+      type: sequelize.STRING,
+      allowNull: false,
+      unique: false,
     },
     email: {
       type: sequelize.STRING,
@@ -19,10 +24,11 @@ var Auth = db.define(
       type: sequelize.STRING,
       allowNull: false,
     },
+    
   },
   {
     tableName: "user",
-    timestamps: true,
+    timestamps: false,
   }
 );
 

@@ -7,7 +7,9 @@ class AuthService {
       .post("http://localhost:5001/api/auth/login", { email, password })
       .then((result) => {
         if (result.data.success && result.data.AccessToken) {
+          console.log(" result.data" + result.data)
           localStorage.setItem("user", JSON.stringify(result.data));
+         
         }
         return result.data;
       })
@@ -19,9 +21,10 @@ class AuthService {
       });
   }
 
-  async register(email, password) {
+  // função de registar
+  async register(nome, email, password) {
     return axios
-      .post("http://localhost:5001/api/auth/register", { email, password })
+      .post("http://localhost:5001/api/auth/register", { nome,email, password })
       .then((result) => {
         if (result.data.success && result.data.AccessToken) {
           localStorage.setItem("user", JSON.stringify(result.data));
@@ -39,7 +42,9 @@ class AuthService {
   //função de logout
   async logout() {
     localStorage.removeItem("user");
+    window.location.reload();
   }
+  
 
   //função que retorna o atual user
   async getCurrentUser() {

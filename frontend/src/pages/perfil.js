@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Box, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import MenuAppBar from '../components/navbar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
-function ProfilePage({ user } ) {
+
+
+
+function ProfilePage() {
     const [open, setOpen] = useState(false); 
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: ''
-    });
+    const [nome, setNome] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData({
-            ...formData,
-            [name]: value
-        });
-    };
+    const nav = useNavigate();
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log("Form data:", formData);
     };
 
     const handleClickOpen = () => {
@@ -30,15 +26,45 @@ function ProfilePage({ user } ) {
     const handleClose = () => {
         setOpen(false);
     };
+    function handleDelete() {
+        axios.delete(`http://localhost:5001/api/auth/delete/${userData.user.id_user}`)
+        .then(response => {
+            console.log(response.data);
+        })
+        .then(() => {
+            localStorage.removeItem('user');
+            nav('/');
+        })
+        .catch(error => {
+            console.error(error);
+        });
+        handleClose();
+    }        
+    const data = localStorage.getItem("user");
+    const userData = JSON.parse(data);
 
-    const handleDelete = () => {
-        console.log("Profile deleted");
-        handleClose(); 
-    };
+    function handleUpdate() {
+        const formData = {
+            nome: nome,
+            email: email,
+            password: password,
+        }
+        axios.put(`http://localhost:5001/api/auth/update/${userData.user.id_user}`, formData)
+        .then(response => {
+            console.log(response.data);
+        })
+        .then(() => {
+            localStorage.setItem('user', JSON.stringify(formData));
+            handleClose();
+        })
+        .catch(error => {
+            console.error(error);
+        })
+    }
 
     return (
         <>
-        <MenuAppBar  user={user}/>
+        <MenuAppBar  user={userData}/>
         <Container component="main" maxWidth="xs">
             <Box
                 sx={{
@@ -53,12 +79,12 @@ function ProfilePage({ user } ) {
                         margin="normal"
                         required
                         fullWidth
-                        id="name"
-                        label="Name"
-                        name="name"
-                        value={formData.name}
-                        onChange={handleInputChange}
-                        autoComplete="name"
+                        id="nome"
+                        label="Nome"
+                        name="nome"
+                        value={nome}
+                        onChange={(value) => setNome(value.target.value)}
+                        autoComplete="nome"
                         autoFocus
                     />
                     <TextField
@@ -68,8 +94,8 @@ function ProfilePage({ user } ) {
                         id="email"
                         label="Email Address"
                         name="email"
-                        value={formData.email}
-                        onChange={handleInputChange}
+                        value={email}
+                        onChange={(value) => setEmail(value.target.value)}
                         autoComplete="email"
                     />
                     <TextField
@@ -80,8 +106,8 @@ function ProfilePage({ user } ) {
                         label="Password"
                         type="password"
                         id="password"
-                        value={formData.password}
-                        onChange={handleInputChange}
+                        value={password}
+                        onChange={(value) => setPassword(value.target.value)}
                         autoComplete="current-password"
                     />
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
@@ -97,6 +123,7 @@ function ProfilePage({ user } ) {
                             type="submit"
                             variant="contained"
                             color="primary"
+                            onClick={handleUpdate}
                         >
                             Save
                         </Button>

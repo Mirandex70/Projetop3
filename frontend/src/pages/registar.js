@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import authService from "../../services/auth.service";
+import authService from "../services/auth.service";
 
 const Login = () => {
+  const [nome, setNome] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [load, setLoad] = useState(false);
@@ -13,7 +14,7 @@ const Login = () => {
     setLoad(true);
 
     authService
-      .login(email, password)
+      .register(nome, email, password)
       .then((result) => {
         //console.log(result);
         if (!result) {
@@ -23,7 +24,7 @@ const Login = () => {
           setLoad(false);
           setEmail("");
           setPassword("");
-          nav("/");
+          nav("/login");
         }
       })
       .catch((error) => {
@@ -38,6 +39,18 @@ const Login = () => {
     <>
       <h1>Sistema de Autenticação</h1>
       <form method="post" onSubmit={handleLogin}>
+        <label htmlFor="nome">Nome:</label>&nbsp;
+        <input
+          type="text"
+          id="nome"
+          name="nome"
+          value={nome}
+          onChange={(event) => {
+            setNome(event.target.value);
+          }}
+          required
+        />
+        <br />
         <label htmlFor="email">Email:</label>&nbsp;
         <input
           type="email"

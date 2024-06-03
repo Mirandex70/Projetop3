@@ -10,9 +10,9 @@ import Menu from '@mui/material/Menu';
 import { useEffect } from 'react';
 import { Link } from '@mui/material';
 import Button from '@mui/material/Button';
+import authService from "../services/auth.service";
 
 export default function MenuAppBar({user}) {
-  const [auth, setAuth] = React.useState(user.isAuthenticated);
   const [anchorEl, setAnchorEl] = React.useState(null);
 
   const handleMenu = (event) => {
@@ -23,10 +23,8 @@ export default function MenuAppBar({user}) {
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-      setAuth(user.isAuthenticated)
-  })
-  const data = user.data;
+  const isAuthenticated = localStorage.getItem("user");
+  const userData = user;
   return (
     <Box sx={{ flexGrow: 1 }}>
 
@@ -37,9 +35,9 @@ export default function MenuAppBar({user}) {
           AutoTracker
           </Link>
           </Typography>
-          {auth && (
+          {isAuthenticated && (
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>{data.name}</Typography>
+                <Typography>{userData.user.nome}</Typography>
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -66,7 +64,7 @@ export default function MenuAppBar({user}) {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}><Link href="/perfil" underline='none'>Perfil</Link> <AccountCircle /></MenuItem>
-                <MenuItem onClick={handleClose}><Button color="error"> Sair</Button></MenuItem>
+                <MenuItem onClick={handleClose}><Button color="error" onClick={authService.logout}>Sair</Button></MenuItem>
               </Menu>
             </div>
           )}
