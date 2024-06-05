@@ -36,7 +36,7 @@ const Login = () => {
 
   return (
     <>
-      <h1>Sistema de Autenticação</h1>
+      <h1>Login</h1>
       <form method="post" onSubmit={handleLogin}>
         <label htmlFor="email">Email:</label>&nbsp;
         <input
