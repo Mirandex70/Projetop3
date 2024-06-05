@@ -1,4 +1,50 @@
-const Imagem = require('../models/imagem.model.js');
+const Imagem = require('../models/imagens.model.js');
+
+exports.findAll = (req, res) => {
+    Imagem.findAll()
+      .then(imagens => {
+        res.send(imagens); 
+      })
+      .catch(err => {
+        res.status(500).send({
+          message:
+            err.message || 'Ocorreu um erro ao recuperar as imagens.'
+        });
+      });
+};
+
+exports.findById = (req, res) => {
+  const id_imagem = req.params.id_imagem;
+
+  Imagem.findByPk(id_imagem)
+    .then(imagem => {
+      res.send(imagem); 
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || 'Ocorreu um erro ao recuperar a imagem.'
+      });
+    });
+};
+
+exports.update = (req, res) => {
+  const id_imagem = req.params.id_imagem;
+
+  Imagem.update(req.body, { 
+    where: { id_imagem: id_imagem } 
+  })
+    .then(imagem => {
+      res.send(imagem); 
+    })
+    .catch(err => {
+      res.status(500).send({
+        message:
+          err.message || 'Ocorreu um erro ao atualizar a imagem.'
+      });
+    });
+};
+
 
 exports.create = (req, res) => {
   const { id_carro, imagem_nome, imagem_url } = req.body;
@@ -9,6 +55,7 @@ exports.create = (req, res) => {
     imagem_url: imagem_url
   })
     .then(imagem => {
+
       res.status(201).send(imagem); 
     })
     .catch(err => {
