@@ -19,6 +19,7 @@ app.use("/", require("./routes/main.route"));
 app.use("/api/carros", require("./routes/carro.route"));
 app.use("/api/user", require("./routes/user.route"));
 app.use("/api/auth", require("./routes/auth.route"));
+app.use('/api/imagem-carros', imagemCarroRoutes); //no sei se isto está bem
 
 app.listen(app.get("port"), () => {
     console.log("Servidor iniciado na porta: "+app.get ("port"));

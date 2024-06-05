@@ -126,12 +126,12 @@ function HomePage() {
                     AutoTracker é uma aplicação de inventário de carros que
                     permite gerir e acompanhar veículos de forma eficiente.
                   </Typography>
-                  <Link href="/login" color="inherit">
+                  <Link to="/login" color="inherit">
                     <Button variant="contained" sx={{ mt: 3, mr: 1 }}>
                       Entrar
                     </Button>
                   </Link>
-                  <Link href="/registar" color="inherit">
+                  <Link to="/registar" color="inherit">
                     <Button variant="contained" sx={{ mt: 3, ml: 1 }}>
                       Registar
                     </Button>
