@@ -1,8 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db.config.js');
 
-const ImagemCarro = sequelize.define('imagens_carro', {
-  id: {
+const Imagem = sequelize.define('imagens', {
+  id_imagem: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
@@ -11,22 +11,21 @@ const ImagemCarro = sequelize.define('imagens_carro', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: 'carro', 
+      model: 'carro',
       key: 'id_carro',
     },
   },
-  id_imagem: {
-    type: DataTypes.INTEGER,
+  imagem_nome: {
+    type: DataTypes.STRING,
     allowNull: false,
-    references: {
-      model: 'imagens', 
-      key: 'id_imagem',
-    },
   },
-},
-  {
-    timestamps: false,
-    tableName: 'imagens_carro',
-  },);
+  imagem_url: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+}, {
+  timestamps: false,
+  tableName: 'imagens',
+});
 
-module.exports = ImagemCarro;
+module.exports = Imagem;
