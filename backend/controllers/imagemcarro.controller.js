@@ -1,6 +1,5 @@
 const ImagemCarro = require('../models/imagemcarro.model');
 
-// Criar uma associação de imagem com carro
 exports.create = async (req, res) => {
   try {
     const { id_carro, id_imagem } = req.body;
@@ -11,7 +10,6 @@ exports.create = async (req, res) => {
   }
 };
 
-// Buscar uma associação específica de imagem com carro pelo ID
 exports.findById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -25,7 +23,6 @@ exports.findById = async (req, res) => {
   }
 };
 
-// Listar todas as associações de imagens com carros
 exports.findAll = async (req, res) => {
   try {
     const imagemCarros = await ImagemCarro.findAll();
@@ -35,7 +32,6 @@ exports.findAll = async (req, res) => {
   }
 };
 
-// Atualizar uma associação de imagem com carro
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;
@@ -45,11 +41,10 @@ exports.update = async (req, res) => {
     });
     res.status(200).json({ message: 'Associação atualizada com sucesso.' });
   } catch (error) {
-    res.statu(500).json({ error: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
-// Excluir uma associação de imagem com carro
 exports.delete = async (req, res) => {
   try {
     const { id } = req.params;
