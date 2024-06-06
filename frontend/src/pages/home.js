@@ -30,7 +30,7 @@ function HomePage() {
   const [cor, setCor] = useState("");
   const [date, setDate] = useState("");
   const [images, setImages] = useState([]);
-  const [selectedImage, setSelectedImage] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   function getCarros() {
     axios
@@ -76,6 +76,19 @@ function HomePage() {
     setSelectedImage("");
   };
 
+  const createImagemCarro = async (id_carro, id_imagem) => {
+    try {
+      const response = await axios.post("http://localhost:5001/api/imagem-carro/create", {
+        id_carro,
+        id_imagem,
+      });
+      console.log("ImagemCarro created: ", response.data);
+    } catch (error) {
+      console.error("There was an error creating the imagemcarro!", error);
+    }
+  };
+  
+
   const handleSave = async () => {
     const newCar = {
       marca,
@@ -87,16 +100,22 @@ function HomePage() {
 
     try {
       const response = await axios.post("http://localhost:5001/api/carros/create", newCar);
-      console.log(response.data);
-      setCarroData([...carroData, response.data.data]);
+      const createdCar = response.data.data;
+      console.log(createdCar);
+
+      if (selectedImage) {
+        await createImagemCarro(createdCar.id_carro, selectedImage);
+      }
+
+      setCarroData([...carroData, createdCar]);
       handleClose();
     } catch (error) {
       console.error("There was an error creating the car!", error);
     }
   };
 
-  const handleImageSelect = (url) => {
-    setSelectedImage(url);
+  const handleImageSelect = (id_imagem) => {
+    setSelectedImage(id_imagem);
   };
 
   return (
@@ -250,7 +269,7 @@ function HomePage() {
                 {images.map((img, index) => (
                   <Grid item xs={4} key={index}>
                     <Box
-                      onClick={() => handleImageSelect(img.imagens_url)}
+                      onClick={() => handleImageSelect(img.imagem_url)}
                       style={{
                         padding: "4px",
                         cursor: "pointer",
@@ -258,7 +277,7 @@ function HomePage() {
                       }}
                     >
                       <img
-                        src={img.imagens_url}
+                        src={img.imagem_url}
                         alt={`Imagem ${index + 1}`}
                         style={{ width: "100%", display: "block" }}
                       />
