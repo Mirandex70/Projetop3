@@ -1,5 +1,6 @@
 const sequelize = require("sequelize");
 const db = require("../config/db.config.js");
+const imagensCarro = require("../models/imagemcarro.model.js")
 
 let Carro = db.define(
   "carro",
@@ -18,5 +19,10 @@ let Carro = db.define(
     tableName: "carro",
   },
 );
+
+
+Carro.hasOne(imagensCarro, {
+  foreignKey: 'id_carro' 
+})
 
 module.exports = Carro;

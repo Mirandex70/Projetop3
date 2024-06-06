@@ -24,15 +24,6 @@ exports.findById = async (req, res) => {
   }
 };
 
-exports.findAll = async (req, res) => {
-  try {
-    const imagemCarros = await ImagemCarro.findAll();
-    res.status(200).json(imagemCarros);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-};
-
 exports.update = async (req, res) => {
   try {
     const { id } = req.params;

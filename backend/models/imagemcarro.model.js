@@ -28,5 +28,6 @@ const ImagemCarro = sequelize.define('imagens_carro', {
     timestamps: false,
     tableName: 'imagens_carro',
   },);
+  
 
 module.exports = ImagemCarro;

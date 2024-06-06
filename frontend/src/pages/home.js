@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Typography,
@@ -19,7 +19,6 @@ import {
 import MenuAppBar from "../components/navbar";
 import image from "../assets/images/home/img1.jpg";
 import axios from "axios";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 function HomePage() {
@@ -29,14 +28,28 @@ function HomePage() {
   const [open, setOpen] = useState(false);
   const [marca, setMarca] = useState("");
   const [cor, setCor] = useState("");
-  const [data, setData] = useState("");
+  const [date, setDate] = useState("");
+  const [images, setImages] = useState([]);
 
   function getCarros() {
     axios
       .get("http://localhost:5001/api/carros/user/" + userData.user.id_user)
       .then((response) => {
-        console.log(response.data);
+        console.log("Dados na chamada da api dos carros do user: ", response.data);
         setCarroData(response.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  function getImages() {
+    axios
+      .get("http://localhost:5001/api/imagens/getAllImages")
+      .then((response) => {
+        console.log("Dados na chamada da api das imagens: ", response.data);
+        const imagens = response.data;
+        setImages(imagens);
       })
       .catch((error) => {
         console.log(error);
@@ -50,6 +63,7 @@ function HomePage() {
   }, []);
 
   const handleClickOpen = () => {
+    getImages();
     setOpen(true);
   };
 
@@ -61,7 +75,7 @@ function HomePage() {
     const newCar = {
       marca,
       cor,
-      data,
+      date,
       id_user: userData.user.id_user
     };
 
@@ -72,7 +86,7 @@ function HomePage() {
       handleClose();
       setMarca("");
       setCor("");
-      setData("");
+      setDate("");
     } catch (error) {
       console.error("There was an error creating the car!", error);
     }
@@ -222,6 +236,9 @@ function HomePage() {
               <DialogContentText id="alert-dialog-description">
                 Adicione um carro:
               </DialogContentText>
+              {images.map((image, index) => (
+                <img key={index} src={image.url} alt={image.alt} /> 
+              ))}
               <TextField
                 autoFocus
                 margin="dense"
@@ -247,11 +264,14 @@ function HomePage() {
                 margin="dense"
                 id="data"
                 label="Data"
-                type="number"
+                type="date"
                 fullWidth
                 variant="outlined"
-                value={data}
-                onChange={(e) => setData(e.target.value)}
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
             </DialogContent>
             <DialogActions>

@@ -1,19 +1,12 @@
 const sequelize = require('../config/db.config.js');
 const { DataTypes } = require('sequelize');
+const imagensCarro = require("../models/imagemcarro.model.js")
 
 const Imagem = sequelize.define('imagens', {
     id_imagem: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
-    },
-    id_carro: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      references: {
-        model: 'carro',
-        key: 'id_carro',
-      },
     },
     imagem_nome: {
       type: DataTypes.STRING,
@@ -27,6 +20,11 @@ const Imagem = sequelize.define('imagens', {
     timestamps: false,
     tableName: 'imagens',
   });
+
+  Imagem.hasOne(imagensCarro, {
+    foreignKey: 'id_imagem' 
+  })
+  
   
   module.exports = Imagem;
   
