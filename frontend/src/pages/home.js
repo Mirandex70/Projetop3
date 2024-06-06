@@ -30,6 +30,7 @@ function HomePage() {
   const [cor, setCor] = useState("");
   const [date, setDate] = useState("");
   const [images, setImages] = useState([]);
+  const [selectedImage, setSelectedImage] = useState("");
 
   function getCarros() {
     axios
@@ -69,6 +70,10 @@ function HomePage() {
 
   const handleClose = () => {
     setOpen(false);
+    setMarca("");
+    setCor("");
+    setDate("");
+    setSelectedImage("");
   };
 
   const handleSave = async () => {
@@ -76,6 +81,7 @@ function HomePage() {
       marca,
       cor,
       date,
+      image: selectedImage,
       id_user: userData.user.id_user
     };
 
@@ -84,12 +90,13 @@ function HomePage() {
       console.log(response.data);
       setCarroData([...carroData, response.data.data]);
       handleClose();
-      setMarca("");
-      setCor("");
-      setDate("");
     } catch (error) {
       console.error("There was an error creating the car!", error);
     }
+  };
+
+  const handleImageSelect = (url) => {
+    setSelectedImage(url);
   };
 
   return (
@@ -99,11 +106,11 @@ function HomePage() {
         <Container maxWidth="lg">
           <Box>
             <Paper
-              sx={{
+              style={{
                 position: "relative",
                 backgroundColor: "grey.800",
                 color: "#fff",
-                mb: 6,
+                marginBottom: 6,
                 backgroundSize: "cover",
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
@@ -111,7 +118,7 @@ function HomePage() {
               }}
             >
               <Box
-                sx={{
+                style={{
                   position: "absolute",
                   top: 0,
                   bottom: 0,
@@ -122,10 +129,10 @@ function HomePage() {
               />
               <Container maxWidth="lg">
                 <Box
-                  sx={{
+                  style={{
                     position: "relative",
-                    p: { xs: 3, md: 6 },
-                    pr: { md: 0 },
+                    padding: { xs: 3, md: 6 },
+                    paddingRight: { md: 0 },
                   }}
                 >
                   <Typography
@@ -140,13 +147,13 @@ function HomePage() {
                     AutoTracker é uma aplicação de inventário de carros que
                     permite gerir e acompanhar veículos de forma eficiente.
                   </Typography>
-                  <Link to="/login" color="inherit">
-                    <Button variant="contained" sx={{ mt: 3, mr: 1 }}>
+                  <Link to="/login" style={{ color: "inherit" }}>
+                    <Button variant="contained" style={{ marginTop: 3, marginRight: 1 }}>
                       Entrar
                     </Button>
                   </Link>
-                  <Link to="/registar" color="inherit">
-                    <Button variant="contained" sx={{ mt: 3, ml: 1 }}>
+                  <Link to="/registar" style={{ color: "inherit" }}>
+                    <Button variant="contained" style={{ marginTop: 3, marginLeft: 1 }}>
                       Registar
                     </Button>
                   </Link>
@@ -170,7 +177,7 @@ function HomePage() {
                 paragraph
               >
                 O nosso objetivo é tornar o controlo de veículos mais eficiente,
-                onde possa registar os seus veiculos de forma rápida e eficaz
+                onde possa registar os seus veículos de forma rápida e eficaz.
               </Typography>
             </Container>
           </Box>
@@ -182,12 +189,12 @@ function HomePage() {
             align="center"
             color="textPrimary"
             gutterBottom
-            sx={{ my: 5 }}
+            style={{ marginTop: 5 }}
           >
             Olá {userData.user.nome}!
           </Typography>
           <TextField label="Pesquisar" variant="outlined" fullWidth />
-          <Box sx={{ mt: 5 }}>
+          <Box style={{ marginTop: 5 }}>
             <Typography
               variant="h6"
               align="center"
@@ -199,14 +206,14 @@ function HomePage() {
             <Button variant="contained" onClick={handleClickOpen}>
               Adicionar Carro
             </Button>
-            <Box sx={{ mt: 5 }}>
+            <Box style={{ marginTop: 5 }}>
               <Grid container spacing={4}>
                 {carroData.map((car, index) => (
                   <Grid item key={index} xs={12} sm={6} md={4}>
                     <Link to={"/car/" + car.id_carro}>
-                      <Card sx={{ maxWidth: 345 }}>
+                      <Card style={{ maxWidth: 345 }}>
                         <CardMedia
-                          sx={{ height: 140 }}
+                          style={{ height: 140 }}
                           image={car.image}
                           title={car.marca}
                         />
@@ -214,7 +221,7 @@ function HomePage() {
                           <Typography gutterBottom variant="h5" component="div">
                             {car.marca}
                           </Typography>
-                          <Typography variant="body2" color="text.secondary">
+                          <Typography variant="body2" color="textSecondary">
                             {car.cor}
                           </Typography>
                         </CardContent>
@@ -236,9 +243,29 @@ function HomePage() {
               <DialogContentText id="alert-dialog-description">
                 Adicione um carro:
               </DialogContentText>
-              {images.map((image, index) => (
-                <img key={index} src={image.url} alt={image.alt} /> 
-              ))}
+              <Typography variant="subtitle1" gutterBottom>
+                Selecione uma imagem:
+              </Typography>
+              <Grid container spacing={2}>
+                {images.map((img, index) => (
+                  <Grid item xs={4} key={index}>
+                    <Box
+                      onClick={() => handleImageSelect(img.imagens_url)}
+                      style={{
+                        padding: "4px",
+                        cursor: "pointer",
+                        border: selectedImage === img.imagem_url ? `2px solid blue` : "none"
+                      }}
+                    >
+                      <img
+                        src={img.imagens_url}
+                        alt={`Imagem ${index + 1}`}
+                        style={{ width: "100%", display: "block" }}
+                      />
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
               <TextField
                 autoFocus
                 margin="dense"
