@@ -24,28 +24,61 @@ import { useParams, useNavigate } from "react-router-dom";
 function CarPage() {
   const { id_carro } = useParams();
   const [dados, setDados] = useState(null);
-
   const [open, setOpen] = useState(false);
   const [marca, setMarca] = useState("");
   const [cor, setCor] = useState("");
   const [data, setData] = useState("");
+  const [idCarro, setIdCarro] = useState("");
+  const [idImagem, setIdImagem] = useState("")
+  const [imagem, setImagem] = useState("");
+
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    async function fetchData() {
-      try {
-        const response = await axios.get(`http://localhost:5001/api/carros/${id_carro}`);
-        setDados(response.data.data);
-        setMarca(response.data.data.marca);
-        setCor(response.data.data.cor);
-        setData(response.data.data.data);
-      } catch (err) {
-        console.error(err);
-      }
+    async function fetchAllData() {
+      await fetchCarData();
+      await fetchImagemCarroData();
+      await fetchImagemData();
     }
-    fetchData();
+    fetchAllData();
   }, [id_carro]);
+
+  const fetchCarData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/carros/${id_carro}`);
+      const carData = response.data.data;
+      setDados(carData);
+      setIdCarro(carData.id_carro);
+      setMarca(carData.marca);
+      setCor(carData.cor);
+      setData(carData.data);
+      console.log(carData.data)
+    } catch (err) {
+      console.error("Error fetching car data:", err);
+    }
+  };
+
+  const fetchImagemCarroData = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/api/imagem-carro/getImage/${id_carro}`);
+      setIdImagem(response.data.imagemCarro.id_imagem);
+    } catch (err) {
+      console.error("Error fetching imagem carro data:", err);
+    }
+  };
+
+  const fetchImagemData = async () => {
+    try {
+      if (idImagem) {
+        const response = await axios.get(`http://localhost:5001/api/imagens/${idImagem}`);
+        setImagem(response.data.imagem_url);
+      }
+    } catch (err) {
+      console.error("Error fetching imagem data:", err);
+    }
+  };
+
 
   const itemUser = localStorage.getItem("user");
   const userData = JSON.parse(itemUser);
@@ -97,7 +130,7 @@ function CarPage() {
               <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
                 <CardMedia
                   component="img"
-                  image={dados.image || "https://images.unsplash.com/photo-1489824904134-891ab64532f1?q=80&w=3131&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"} 
+                  image={imagem} 
                   alt={dados.marca}
                   sx={{ width: '100%', height: 'auto', flex: '1 0 auto' }}
                 />

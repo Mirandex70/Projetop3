@@ -28,7 +28,7 @@ function HomePage() {
   const [open, setOpen] = useState(false);
   const [marca, setMarca] = useState("");
   const [cor, setCor] = useState("");
-  const [date, setDate] = useState("");
+  const [data, setData] = useState("");
   const [images, setImages] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
@@ -72,12 +72,13 @@ function HomePage() {
     setOpen(false);
     setMarca("");
     setCor("");
-    setDate("");
+    setData("");
     setSelectedImage("");
   };
 
   const createImagemCarro = async (id_carro, id_imagem) => {
     try {
+      console.log(id_carro, id_imagem);
       const response = await axios.post("http://localhost:5001/api/imagem-carro/create", {
         id_carro,
         id_imagem,
@@ -93,7 +94,7 @@ function HomePage() {
     const newCar = {
       marca,
       cor,
-      date,
+      data,
       image: selectedImage,
       id_user: userData.user.id_user
     };
@@ -116,6 +117,7 @@ function HomePage() {
 
   const handleImageSelect = (id_imagem) => {
     setSelectedImage(id_imagem);
+    console.log("Imagem selecionada ", selectedImage)
   };
 
   return (
@@ -269,11 +271,11 @@ function HomePage() {
                 {images.map((img, index) => (
                   <Grid item xs={4} key={index}>
                     <Box
-                      onClick={() => handleImageSelect(img.imagem_url)}
+                      onClick={() => handleImageSelect(img.id_imagem)}
                       style={{
                         padding: "4px",
                         cursor: "pointer",
-                        border: selectedImage === img.imagem_url ? `2px solid blue` : "none"
+                        border: selectedImage === img.id_imagem ? `2px solid blue` : "none"
                       }}
                     >
                       <img
@@ -310,11 +312,11 @@ function HomePage() {
                 margin="dense"
                 id="data"
                 label="Data"
-                type="date"
+                type="number"
                 fullWidth
                 variant="outlined"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
+                value={data}
+                onChange={(e) => setData(e.target.value)}
                 InputLabelProps={{
                   shrink: true,
                 }}
